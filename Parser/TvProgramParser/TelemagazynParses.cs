@@ -22,15 +22,15 @@ namespace Parser
                     startDay = startDay.AddDays(1);
                 } while (DateTime.Compare(startDay, endsDay) < 0);
 
+                ExcelExporter.ColumnNames.Clear();
                 Type itemType = typeof(TvProgramModel);
                 PropertyInfo[] properties = itemType.GetProperties();
                 foreach (PropertyInfo property in properties)
                 {
                     string propertyName = property.Name;
-                    ExcelExporter.ColumnNames.Clear();
                     ExcelExporter.ColumnNames.Add(propertyName);
                 }
-                ExcelExporter.SaveAs(Settings.ExcelPath,ProgramsHolder.excelOutput);
+                ExcelExporter.SaveAs(Settings.TvProgramExcelPath,ProgramsHolder.excelOutput);
             }
         }
     }

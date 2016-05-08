@@ -28,7 +28,7 @@ namespace Parser.HolidayParser
                 ExcelExporter.ColumnNames.Add(propertyName);
             }
             AddExcelOutput();
-            ExcelExporter.SaveAs(Settings.ExcelPath, HolidayHolder.excelOutput);
+            ExcelExporter.SaveAs(Settings.DatesExcelPath, HolidayHolder.excelOutput);
         }
         private HolidayModel ParseSingleHoliday(string respondedString)
         {

@@ -54,8 +54,7 @@ namespace Parser
             writeRange.Worksheet.SaveAs(path);
             excel.Quit();
             Console.WriteLine("Complete");
-            Console.WriteLine($"Saved: {outputObj.Count} rows.");
-            Console.ReadKey();
+            Console.WriteLine($"Saved: {outputObj.Count} rows.\n");
         }
     }
 }

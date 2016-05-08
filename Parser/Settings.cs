@@ -15,7 +15,8 @@ namespace Parser
         //HolidayParser
         public static string HolidaySiteUrl = @"http://www.kalendarzswiat.pl/lista_swiat/";
 
-        public static string ExcelPath = @"C:\Test\TeleMagazynParsed.xlsx";
+        public static string TvProgramExcelPath = @"C:\Test\TeleMagazynParsed.xlsx";
+        public static string DatesExcelPath = @"C:\Test\DatesParsed.xlsx";
         public static DateTime startData = new DateTime(2016, 05, 08);
         public static DateTime endData = new DateTime(2016, 05, 08);
     }
