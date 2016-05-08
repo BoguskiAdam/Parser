@@ -3,7 +3,7 @@
     public enum AgeCategoryEnum
     {
         Twelve,
-        Sixteen,
+        Eighteen,
         NoCategory,
         Zero
     }

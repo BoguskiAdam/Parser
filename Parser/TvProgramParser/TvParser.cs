@@ -129,7 +129,7 @@ namespace Parser
                 //Age category
                 indexOfStart = respondedString.IndexOf(ageCategorySearchedString, indexOfEnd) + ageCategorySearchedString.Length;
                 indexOfEnd = respondedString.IndexOf("\">", indexOfStart);
-                result = respondedString.Substring(indexOfStart + 1, indexOfEnd - indexOfStart - 1);
+                result = respondedString.Substring(indexOfStart, indexOfEnd - indexOfStart);
                 AgeCategoryEnum ageCategoryEnum = GetAgeCategoryEnum(result);
                 tvProgramModel.AgeCategory = ageCategoryEnum;
 
@@ -163,6 +163,10 @@ namespace Parser
                     return AgeCategoryEnum.Twelve;
                 case "wiek0":
                     return AgeCategoryEnum.Zero;
+                case "wiek16":
+                    return AgeCategoryEnum.Eighteen;
+                case "wiek18":
+                    return AgeCategoryEnum.Eighteen;
                 default:
                     return AgeCategoryEnum.NoCategory;
             }
