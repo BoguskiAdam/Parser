@@ -44,7 +44,7 @@ namespace Parser.HolidayParser
 
             prefix = "<div class=\"fcal_feast_date\">";
             _pattern = $"(?={prefix}).+?({sufix})";
-            expression =  new Regex(_pattern, RegexOptions.Compiled);
+            expression = new Regex(_pattern, RegexOptions.Compiled);
             matches = expression.Matches(respondedString);
             match = matches[0].Value;
             int indexOfEnd = match.IndexOf(" ", prefix.Length - 1);
@@ -55,7 +55,7 @@ namespace Parser.HolidayParser
 
         private int GetMonthNumber(string monthStr)
         {
-            switch(monthStr)
+            switch (monthStr)
             {
                 case "Styczeń":
                     return 1;
@@ -105,7 +105,7 @@ namespace Parser.HolidayParser
                 expression = new Regex(_pattern, RegexOptions.Compiled);
                 matches = expression.Matches(respondedString);
 
-                foreach(Match match in matches)
+                foreach (Match match in matches)
                 {
                     HolidayModel holidayModel = ParseSingleHoliday(match.Value);
                     holidayModel.Year = int.Parse(year);
@@ -113,7 +113,27 @@ namespace Parser.HolidayParser
                     holidayModel.ExtendedDate = date.ToShortDateString();
                     holidayModel.Month = date.Month;
                     holidayModel.DayOfWeek = date.DayOfWeek.ToString();
-                    HolidayHolder.HolidayModel.Add(holidayModel);
+                    if (holidayModel.Name.Contains(','))
+                    {
+                        IEnumerable<string> splitted = holidayModel.Name.Split(',');
+                        foreach(string str in splitted)
+                        {
+                            HolidayModel newModel = new HolidayModel()
+                            {
+                                Day = holidayModel.Day,
+                                DayOfWeek = holidayModel.DayOfWeek,
+                                ExtendedDate = holidayModel.ExtendedDate,
+                                IsDayOff = holidayModel.IsDayOff,
+                                Month = holidayModel.Month,
+                                Year = holidayModel.Year,
+                                Name = str.StartsWith(" ") ? str.Substring(1) : str
+                            };
+                           
+                            HolidayHolder.HolidayModel.Add(newModel);
+                        }
+                    }
+                    else
+                        HolidayHolder.HolidayModel.Add(holidayModel);
                 }
             }
         }

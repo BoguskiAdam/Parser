@@ -17,7 +17,8 @@ namespace Parser
 
         public static string TvProgramExcelPath = @"C:\Test\TeleMagazynParsed.xlsx";
         public static string DatesExcelPath = @"C:\Test\DatesParsed.xlsx";
-        public static DateTime startData = new DateTime(2016, 05, 08);
-        public static DateTime endData = new DateTime(2016, 05, 08);
+
+        public static DateTime startData = new DateTime(2016, 05, 07);
+        public static DateTime endData = new DateTime(2016, 05, 09);
     }
 }

@@ -35,9 +35,11 @@ namespace Parser
                     listElementString = respondedString.Substring(0, indexOfEnd += 5);
                     respondedString = respondedString.Substring(indexOfEnd);
                     ParseListElement(listElementString, ref tempModel);
+
                     if (tempModel.Url == null)
                         continue;
                     Console.WriteLine($"Parsing program url: {tempModel.Url}");
+                    tempModel.Date = day;
                     ParseTvProgram(ref tempModel);
                     ProgramsHolder.AddProgram(tempModel);
                     indexOfStart = indexOfEnd;
