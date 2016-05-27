@@ -150,7 +150,9 @@ namespace Parser
                 indexOfStart = respondedString.IndexOf(programNameSearchedString, indexOfEnd) + programNameSearchedString.Length;
                 indexOfEnd = respondedString.IndexOf("\"", indexOfStart);
                 result = respondedString.Substring(indexOfStart, indexOfEnd - indexOfStart);
-                tvProgramModel.Name = result.Replace("&quot;","\"");
+                tvProgramModel.Name = result.Replace("&quot;", "\"");
+                tvProgramModel.Name = result.Replace("&#039;", "'");
+                tvProgramModel.Name = result.Replace(";", "");
 
                 //Category
                 indexOfStart = respondedString.IndexOf(categorySearchedString, indexOfEnd);

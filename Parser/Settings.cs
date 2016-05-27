@@ -21,7 +21,7 @@ namespace Parser
         public static string TvProgramCSVPath = @"C:\Test\TeleMagazynParsed.csv";
         public static string DatesCSVPath = @"C:\Test\DatesParsed.csv";
 
-        public static DateTime startData = new DateTime(2012, 01, 01);
-        public static DateTime endData = new DateTime(2012, 01, 05);
+        public static DateTime startData = new DateTime(2013, 01, 01);
+        public static DateTime endData = new DateTime(2014, 01, 01);
     }
 }
