@@ -49,7 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\AgeCategoryEnum.cs" />
-    <Compile Include="Excel\ExcelExporter.cs" />
+    <Compile Include="Exporter\ExcelExporter.cs" />
+    <Compile Include="Exporter\FileExporter.cs" />
     <Compile Include="Helpers\IExcelOutput.cs" />
     <Compile Include="HolidayParser\HolidayHolder.cs" />
     <Compile Include="HolidayParser\HolidayParser.cs" />

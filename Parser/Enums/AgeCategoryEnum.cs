@@ -5,6 +5,15 @@
         Twelve,
         Eighteen,
         NoCategory,
-        Zero
+        Zero,
+        One,
+        Seven,
+        Eight,
+        Fifteen,
+        Fourteen,
+        Thirteen,
+        Eleven,
+        Ten,
+        Nine
     }
 }

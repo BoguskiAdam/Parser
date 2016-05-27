@@ -1,17 +1,16 @@
-﻿using Parser.Models;
+﻿using Parser.Exporter;
+using Parser.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Parser
 {
     public class TvParser
     {
-        public void ParseTvDay(string day)
+        public void ParseTvDay(string day, bool first = false, FileExporter fileExporter = null)
         {
             WebClient tvWebClient = new WebClient();
             string respondedString = tvWebClient.DownloadString(Settings.TvProgramSiteUrl + Settings.TvProgramDayPrefix + day);
@@ -41,11 +40,24 @@ namespace Parser
                     Console.WriteLine($"Parsing program url: {tempModel.Url}");
                     tempModel.Date = day;
                     ParseTvProgram(ref tempModel);
+
+                    int index = ProgramsHolder.ProgramModel.Count();
+                    if (!first)
+                    {
+                        TvProgramModel model = ProgramsHolder.ProgramModel.ElementAt(index - 1);
+                        model.Ends = tempModel.Starts;
+                        model.Duration = model.Ends.TotalMinutes - model.Starts.TotalMinutes;
+                        if (model.Duration < 0)
+                            model.Duration += 60 * 24;
+                        fileExporter.ExportLine(GetLineByModel(ProgramsHolder.ProgramModel.ElementAt(index - 1)));
+                    }
+                    first = false;
+
                     ProgramsHolder.AddProgram(tempModel);
                     indexOfStart = indexOfEnd;
                 } while (indexOfEnd != -1);
+                fileExporter.ExportLine(GetLineByModel(ProgramsHolder.ProgramModel.Last()));
                 AddEndsTime();
-                AddExcelOutput();
             }
         }
 
@@ -66,22 +78,21 @@ namespace Parser
 
         }
 
-        private void AddExcelOutput()
+        private string GetLineByModel(TvProgramModel model)
         {
-            foreach(TvProgramModel model in ProgramsHolder.ProgramModel)
+            string result = string.Empty;
+            Type itemType = model.GetType();
+            PropertyInfo[] properties = itemType.GetProperties();
+            ExcelOutputModel newExcelOutputModel = new ExcelOutputModel();
+            foreach (PropertyInfo property in properties)
             {
-                Type itemType = model.GetType();
-                PropertyInfo[] properties = itemType.GetProperties();
-                ExcelOutputModel newExcelOutputModel = new ExcelOutputModel();
-                foreach (PropertyInfo property in properties)
-                {
-                    string propertyName = property.Name;
-                    string propertyValue = string.Empty;
-                    var propertyVarValue = property.GetValue(model, null);
-                    newExcelOutputModel.Row.Add(propertyVarValue.ToString());
-                }
-                ProgramsHolder.excelOutput.Add(newExcelOutputModel);
+                string propertyName = property.Name;
+                string propertyValue = string.Empty;
+                var propertyVarValue = property.GetValue(model, null);
+                result +=propertyVarValue.ToString() + ";";
             }
+            result = result.Substring(0, result.Length - 2);
+            return result;
         }
 
         private void ParseListElement(string text, ref TvProgramModel tvProgramModel)
@@ -139,7 +150,7 @@ namespace Parser
                 indexOfStart = respondedString.IndexOf(programNameSearchedString, indexOfEnd) + programNameSearchedString.Length;
                 indexOfEnd = respondedString.IndexOf("\"", indexOfStart);
                 result = respondedString.Substring(indexOfStart, indexOfEnd - indexOfStart);
-                tvProgramModel.Name = result;
+                tvProgramModel.Name = result.Replace("&quot;","\"");
 
                 //Category
                 indexOfStart = respondedString.IndexOf(categorySearchedString, indexOfEnd);
@@ -161,10 +172,28 @@ namespace Parser
         {
             switch (result)
             {
-                case "wiek12":
-                    return AgeCategoryEnum.Twelve;
                 case "wiek0":
                     return AgeCategoryEnum.Zero;
+                case "wiek1":
+                    return AgeCategoryEnum.One;
+                case "wiek7":
+                    return AgeCategoryEnum.Seven;
+                case "wiek8":
+                    return AgeCategoryEnum.Eight;
+                case "wiek9":
+                    return AgeCategoryEnum.Nine;
+                case "wiek10":
+                    return AgeCategoryEnum.Ten;
+                case "wiek11":
+                    return AgeCategoryEnum.Eleven;
+                case "wiek12":
+                    return AgeCategoryEnum.Twelve;
+                case "wiek13":
+                    return AgeCategoryEnum.Thirteen;
+                case "wiek14":
+                    return AgeCategoryEnum.Fourteen;
+                case "wiek15":
+                    return AgeCategoryEnum.Fifteen;
                 case "wiek16":
                     return AgeCategoryEnum.Eighteen;
                 case "wiek18":

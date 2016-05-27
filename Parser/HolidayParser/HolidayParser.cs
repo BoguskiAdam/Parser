@@ -1,4 +1,5 @@
-﻿using Parser.Models;
+﻿using Parser.Exporter;
+using Parser.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,7 @@ namespace Parser.HolidayParser
     {
         public void Parse(int startYear, int stopYear)
         {
-            for (int year = startYear; year <= stopYear; year++)
-            {
-                Console.WriteLine($"Parsing: {year}");
-                ParseHolidayYear(year.ToString());
-            }
+            ExcelExporter.ColumnNames.Clear();
             Type itemType = typeof(HolidayModel);
             PropertyInfo[] properties = itemType.GetProperties();
             ExcelExporter.ColumnNames.Clear();
@@ -27,8 +24,16 @@ namespace Parser.HolidayParser
                 string propertyName = property.Name;
                 ExcelExporter.ColumnNames.Add(propertyName);
             }
-            AddExcelOutput();
-            ExcelExporter.SaveAs(Settings.DatesExcelPath, HolidayHolder.excelOutput);
+            FileExporter exporter = new FileExporter(Settings.DatesCSVPath);
+
+            for (int year = startYear; year <= stopYear; year++)
+            {
+                Console.WriteLine($"Parsing: {year}");
+                ParseHolidayYear(year.ToString(),exporter);
+            }
+            
+            //AddExcelOutput();
+            //ExcelExporter.SaveAs(Settings.DatesExcelPath, HolidayHolder.excelOutput);
         }
         private HolidayModel ParseSingleHoliday(string respondedString)
         {
@@ -86,7 +91,7 @@ namespace Parser.HolidayParser
             }
         }
 
-        private void ParseMonth(string respondedString, string year)
+        private void ParseMonth(string respondedString, string year, FileExporter exporter = null)
         {
             string prefix = "<div class=\"fcal_monthname\">";
             string sufix = "</div>";
@@ -128,16 +133,17 @@ namespace Parser.HolidayParser
                                 Year = holidayModel.Year,
                                 Name = str.StartsWith(" ") ? str.Substring(1) : str
                             };
-                           
-                            HolidayHolder.HolidayModel.Add(newModel);
+                            exporter.ExportHolidayModel(newModel);
+                            //HolidayHolder.HolidayModel.Add(newModel);
                         }
                     }
                     else
-                        HolidayHolder.HolidayModel.Add(holidayModel);
+                        exporter.ExportHolidayModel(holidayModel);
+                    //HolidayHolder.HolidayModel.Add(holidayModel);
                 }
             }
         }
-        public void ParseHolidayYear(string year)
+        public void ParseHolidayYear(string year,FileExporter exporter = null)
         {
             WebClient holidayWebClient = new WebClient();
             holidayWebClient.Encoding = Encoding.UTF8;
@@ -148,7 +154,7 @@ namespace Parser.HolidayParser
 
             foreach (Match match in matches)
             {
-                ParseMonth(match.Value, year);
+                ParseMonth(match.Value, year,exporter);
             }
         }
 
