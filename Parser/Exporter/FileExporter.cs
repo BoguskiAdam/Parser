@@ -2,6 +2,7 @@
 using System.IO;
 using Parser.Models;
 using System.Reflection;
+using System.Text;
 
 namespace Parser.Exporter
 {
@@ -38,6 +39,7 @@ namespace Parser.Exporter
                 {
                     using (StreamWriter file = File.AppendText(path))
                     {
+                        var b = file.Encoding;
                         file.WriteLine(line);
                         boolean = false;
                     }

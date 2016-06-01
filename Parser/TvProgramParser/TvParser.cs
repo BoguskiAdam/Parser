@@ -153,6 +153,8 @@ namespace Parser
                 tvProgramModel.Name = result.Replace("&quot;", "\"");
                 tvProgramModel.Name = result.Replace("&#039;", "'");
                 tvProgramModel.Name = result.Replace(";", "");
+                if (tvProgramModel.Name.StartsWith("+"))
+                    tvProgramModel.Name = " " + tvProgramModel;
 
                 //Category
                 indexOfStart = respondedString.IndexOf(categorySearchedString, indexOfEnd);
